@@ -1,2 +1,15 @@
-# EvaluacionFinal_Nube
-última evaluación computación nube
+🐳 Evaluacion Final: Despliegue de Aplicación PHP con Docker📝 Descripción del ProyectoEste proyecto forma parte de la Evaluación Final de Nube, enfocada en demostrar la habilidad de dockerizar una aplicación web en PHP para un entorno de despliegue portable.La configuración de Docker Compose levanta dos servicios principales:web: El contenedor de la aplicación PHP y el servidor web (construido desde el contexto ./web).bd: El contenedor de la base de datos MySQL.Se ha implementado el uso de Healthchecks y depends_on para asegurar que la aplicación web solo inicie una vez que la base de datos esté lista para recibir conexiones.🚀 Tecnologías UtilizadasLenguaje de Programación: PHP (La imagen base se define en ./web/Dockerfile)Contenerización: Docker / Docker ComposeBase de Datos: MySQL 8.0Servidor Web: [Ej: Nginx o Apache] (Definido en ./web/Dockerfile)Red de Contenedores: red_proyecto🛠️ Requisitos PreviosPara ejecutar el proyecto, asegúrate de tener instalado:GitDocker y Docker Compose (Versión 2.0+ recomendado)📦 Instalación y EjecuciónSigue estos pasos para levantar la aplicación usando la configuración de Docker Compose:1. Clonar el RepositorioAbre tu terminal y navega hasta el directorio deseado:Bashgit clone https://www.youtube.com/watch?v=W3ARA19UB4w
+cd EvaluacionFinal_Nube
+2. Verificar la Configuración de la Base de DatosLa configuración del docker-compose.yml ya establece las variables de la base de datos. Si necesitas cambiar las credenciales, edita el archivo docker-compose.yml en la sección bd.VariableValor ConfiguradoMYSQL_DATABASEevaluacion_nubeMYSQL_USERusuarioMYSQL_PASSWORD1234MYSQL_ROOT_PASSWORD1234Nota: El servicio web está configurado para conectarse al host bd utilizando estas credenciales.3. Preparar Inicialización de la Base de Datos (Opcional)Si tu proyecto necesita que se ejecuten scripts SQL al inicio (como la creación de tablas), colócalos dentro del directorio:./db/initdb.d/
+4. Construir y Levantar los ContenedoresEjecuta el siguiente comando. docker-compose construirá primero la imagen web (usando el ./web/Dockerfile) y luego levantará los servicios:Bashdocker-compose up --build -d
+5. Acceder a la AplicaciónLa aplicación web está expuesta en el puerto 8080 del host, mapeado al puerto 80 del contenedor web.🔗 URL de la Aplicación: http://localhost:8080Para verificar el estado de los servicios, puedes usar:Bashdocker-compose ps
+📂 Estructura del ProyectoLa estructura del proyecto es crítica para la funcionalidad de los volúmenes y el build de Docker:EvaluacionFinal_Nube/
+├── web/                  # Contexto de build para la imagen PHP/Web. Contiene:
+│   ├── Dockerfile          # Instrucciones para el build de la imagen 'web'
+│   └── (Código PHP)        # El código fuente de la aplicación
+├── db/                   # Directorio para la configuración de la BD
+│   └── initdb.d/           # Scripts SQL que se ejecutan la primera vez que inicia la BD
+├── static/               # Posibles archivos estáticos (CSS, JS, imágenes)
+├── docker-compose.yml    # Archivo de configuración central (Definido por el profesor/tú)
+└── README.md
+👤 Información de la EvaluaciónCampoValorNombre del Contenedor WebwebNombre del Contenedor DBbdRed Utilizadared_proyectoVolúmenes Persistentesdbdata (para datos de MySQL
