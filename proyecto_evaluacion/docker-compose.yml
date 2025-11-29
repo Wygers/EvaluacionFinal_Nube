@@ -1,0 +1,51 @@
+services:
+
+  bd:
+    image: mysql:8.0
+    container_name: bd
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: evaluacion_nube
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: 1234
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+      - ./static:/var/www/html/static
+      - ./web:/var/www/html
+    networks:
+      - red_proyecto
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      retries: 5
+      timeout: 3s
+
+  web:
+    build: ./web
+    container_name: web
+    restart: always
+    ports:
+      - "8080:80"
+    networks:
+      - red_proyecto
+    environment:
+      DB_HOST: bd
+      DB_USER: usuario
+      DB_PASSWORD: 1234
+      DB_NAME: evaluacion_nube
+    depends_on:
+      bd:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+networks:
+  red_proyecto:
+
+volumes:
+  dbdata:
